@@ -52,6 +52,11 @@ export default function Lightbox({ project, onClose }) {
                 {project.details.map((d) => <li key={d}>{d}</li>)}
               </ul>
             )}
+            {project.playUrl && (
+              <a className="text-link" href={project.playUrl} target="_blank" rel="noreferrer">
+                Play on itch.io
+              </a>
+            )}
             <div className="lightbox-actions">
               {count > 1 && (
                 <>

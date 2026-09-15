@@ -51,6 +51,12 @@ export const featured = {
     'Cars follow whichever lane they are placed on',
     'Cars dropped off the road find the nearest lane and merge onto it',
   ],
+  video: {
+    url: 'https://drive.google.com/file/d/1D__91bMoh9DyKQQehAjVKk0a2JmInH1x/view?usp=sharing',
+    embed: 'https://drive.google.com/file/d/1D__91bMoh9DyKQQehAjVKk0a2JmInH1x/preview',
+    poster: traffic1,
+    title: 'Traffic simulator video',
+  },
   images: [
     { src: traffic1, alt: 'Cars driving in a line along a curved two-lane track' },
     { src: traffic2, alt: 'Wide view of the track with cars spread across both lanes' },
@@ -61,9 +67,22 @@ export const featured = {
 // NOTE: engine labels marked 'Unity' were inferred from the screenshots. Double-check them.
 export const prototypes = [
   {
+    title: 'Super Peach',
+    engine: 'Godot',
+    span: 'full',
+    pixel: true,
+    summary: 'A 2D platformer with jumping, coins to collect, enemies to avoid, and a coin tally at the end.',
+    details: [],
+    playUrl: 'https://kousa2k3.itch.io/super-peach',
+    images: [
+      { src: platformer1, alt: 'Knight standing on grass blocks next to a Space to jump prompt' },
+      { src: platformer2, alt: 'Knight near a palm tree with a green slime enemy below' },
+      { src: platformer3, alt: 'End screen reading You collected 7 coins' },
+    ],
+  },
+  {
     title: 'Endless flyer',
     engine: 'Unity',
-    span: 'wide',
     summary: 'An infinite flight through a canyon. Fly up and down with W and S to dodge obstacles that spawn at random positions.',
     details: ['W and S to climb and dive', 'Scrolling background and animated propeller', 'Obstacles spawn at random positions'],
     images: [{ src: flyer, alt: 'Red and yellow plane flying between dark canyon walls' }],
@@ -95,19 +114,6 @@ export const prototypes = [
     summary: 'A Fruit Ninja-style game. Shown here in the editor preview to give a sense of the play space.',
     details: [],
     images: [{ src: slicer, alt: 'Editor view of balls and a bomb launched into the play area' }],
-  },
-  {
-    title: 'Pixel platformer',
-    engine: 'Godot',
-    span: 'wide',
-    pixel: true,
-    summary: 'A 2D platformer with jumping, coins to collect, enemies to avoid, and a coin tally at the end.',
-    details: [],
-    images: [
-      { src: platformer1, alt: 'Knight standing on grass blocks next to a Space to jump prompt' },
-      { src: platformer2, alt: 'Knight near a palm tree with a green slime enemy below' },
-      { src: platformer3, alt: 'End screen reading You collected 7 coins' },
-    ],
   },
   {
     title: 'Shooter prototypes',

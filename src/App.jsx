@@ -34,22 +34,41 @@ function Hero() {
 }
 
 function Featured() {
-  const [shot, setShot] = useState(0)
+  const media = [
+    ...(featured.video ? [{ type: 'video', ...featured.video }] : []),
+    ...featured.images.map((img) => ({ type: 'image', ...img })),
+  ]
+  const [active, setActive] = useState(0)
+  const current = media[active]
+
   return (
     <article className="featured">
       <div className="featured-media">
-        <img src={featured.images[shot].src} alt={featured.images[shot].alt} />
-        {featured.images.length > 1 && (
-          <div className="featured-thumbs" role="group" aria-label="Screenshots">
-            {featured.images.map((img, i) => (
+        <div className="featured-stage">
+          {current.type === 'video' ? (
+            <iframe
+              src={current.embed}
+              title={current.title}
+              allow="autoplay; fullscreen"
+              allowFullScreen
+              loading="lazy"
+            />
+          ) : (
+            <img src={current.src} alt={current.alt} />
+          )}
+        </div>
+        {media.length > 1 && (
+          <div className="featured-thumbs" role="group" aria-label="Video and screenshots">
+            {media.map((m, i) => (
               <button
-                key={img.src}
+                key={i}
                 type="button"
-                aria-pressed={shot === i}
-                aria-label={`Show screenshot ${i + 1}`}
-                onClick={() => setShot(i)}
+                aria-pressed={active === i}
+                aria-label={m.type === 'video' ? 'Play video' : `Show screenshot ${featured.video ? i : i + 1}`}
+                onClick={() => setActive(i)}
               >
-                <img src={img.src} alt="" />
+                <img src={m.type === 'video' ? m.poster : m.src} alt="" />
+                {m.type === 'video' && <span className="play-badge" aria-hidden="true" />}
               </button>
             ))}
           </div>
@@ -62,6 +81,13 @@ function Featured() {
         <ul className="feature-list">
           {featured.features.map((f) => <li key={f}>{f}</li>)}
         </ul>
+        {featured.video && (
+          <p className="featured-watch">
+            <a className="text-link" href={featured.video.url} target="_blank" rel="noreferrer">
+              Watch on Google Drive
+            </a>
+          </p>
+        )}
       </div>
     </article>
   )
@@ -70,24 +96,31 @@ function Featured() {
 function Prototypes({ onOpen }) {
   return (
     <div className="proto-grid">
-      {prototypes.map((p) => (
-        <button
-          key={p.title}
-          type="button"
-          className={`proto${p.span === 'wide' ? ' proto--wide' : ''}`}
-          onClick={() => onOpen(p)}
-        >
-          <span className={`proto-image${p.pixel ? ' is-pixel' : ''}`}>
-            <img src={p.images[0].src} alt={p.images[0].alt} loading="lazy" />
-          </span>
-          <span className="proto-title">{p.title}</span>
-          <span className="engine">{p.engine}</span>
-          <span className="proto-summary">{p.summary}</span>
-          <span className="proto-more">
-            {p.images.length > 1 ? `View ${p.images.length} screenshots` : 'View screenshot'}
-          </span>
-        </button>
-      ))}
+      {prototypes.map((p) => {
+        const span = p.span === 'full' ? ' proto--full' : p.span === 'wide' ? ' proto--wide' : ''
+        return (
+          <article key={p.title} className={`proto${span}`}>
+            <div className="proto-open" onClick={() => onOpen(p)}>
+              <span className={`proto-image${p.pixel ? ' is-pixel' : ''}`}>
+                <img src={p.images[0].src} alt={p.images[0].alt} loading="lazy" />
+              </span>
+              <h3 className="proto-title">{p.title}</h3>
+              <span className="engine">{p.engine}</span>
+              <p className="proto-summary">{p.summary}</p>
+            </div>
+            <div className="proto-links">
+              <button type="button" className="proto-more" onClick={() => onOpen(p)}>
+                {p.images.length > 1 ? `View ${p.images.length} screenshots` : 'View screenshot'}
+              </button>
+              {p.playUrl && (
+                <a className="proto-more" href={p.playUrl} target="_blank" rel="noreferrer">
+                  Play on itch.io
+                </a>
+              )}
+            </div>
+          </article>
+        )
+      })}
     </div>
   )
 }

@@ -464,11 +464,44 @@ button {
   border-radius: var(--radius-lg);
 }
 
-.featured-media > img {
-  width: 100%;
+.featured-stage {
   aspect-ratio: 16 / 9;
-  object-fit: cover;
+  overflow: hidden;
   border-radius: var(--radius-sm);
+  background: #0b1120;
+}
+
+.featured-stage img,
+.featured-stage iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  object-fit: cover;
+}
+
+.play-badge {
+  position: absolute;
+  inset: 0;
+  width: 28px;
+  height: 28px;
+  margin: auto;
+  border-radius: 50%;
+  background: var(--marigold);
+}
+
+.play-badge::after {
+  content: '';
+  position: absolute;
+  left: 11px;
+  top: 8px;
+  border-style: solid;
+  border-width: 6px 0 6px 9px;
+  border-color: transparent transparent transparent var(--on-marigold);
+}
+
+.featured-watch {
+  margin-top: 1.25rem;
 }
 
 .featured-thumbs {
@@ -478,6 +511,7 @@ button {
 }
 
 .featured-thumbs button {
+  position: relative;
   width: 96px;
   padding: 0;
   border: 2px solid transparent;
@@ -549,16 +583,23 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.2rem;
-  padding: 0;
-  border: 0;
-  background: none;
-  text-align: left;
-  cursor: pointer;
 }
 
 .proto--wide {
   grid-column: span 2;
+}
+
+.proto--full {
+  grid-column: 1 / -1;
+}
+
+.proto-open {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  width: 100%;
+  cursor: pointer;
 }
 
 .proto-image {
@@ -580,11 +621,19 @@ button {
   aspect-ratio: 16 / 7.4;
 }
 
+.proto--full .proto-image img {
+  aspect-ratio: 21 / 8;
+}
+
 .proto-title {
   font-size: 1.3rem;
   font-weight: 750;
   font-stretch: 108%;
   font-variation-settings: 'wdth' 108;
+}
+
+.proto--full .proto-title {
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
 }
 
 .proto-summary {
@@ -594,17 +643,27 @@ button {
   font-size: 0.98rem;
 }
 
+.proto-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-top: 0.6rem;
+}
+
 .proto-more {
-  margin-top: 0.5rem;
+  padding: 0;
+  border: 0;
+  background: none;
   font-weight: 600;
   font-size: 0.95rem;
   text-decoration: underline;
   text-decoration-color: var(--marigold);
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
+  cursor: pointer;
 }
 
-.proto:hover .proto-more {
+.proto-more:hover {
   text-decoration-thickness: 4px;
 }
 
@@ -886,7 +945,8 @@ button {
     grid-column: auto;
   }
 
-  .proto--wide .proto-image img {
+  .proto--wide .proto-image img,
+  .proto--full .proto-image img {
     aspect-ratio: 16 / 10;
   }
 
