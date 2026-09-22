@@ -196,7 +196,7 @@ export const now = {
   status: 'Concept in development',
   body: [
     'A soulslike set in India during the Dvapara Yuga, in the years after the Mahabharata. Think of it as India’s answer to Black Myth: Wukong.',
-    'I’m developing the concept to pitch for the USC Games Advanced Game Project, 2027–28.',
+    'The game will explore themes of dharma, karma, and the cyclical nature of time, with a focus on challenging combat and deep lore.',
   ],
 }
 
