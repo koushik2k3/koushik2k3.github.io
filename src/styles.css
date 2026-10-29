@@ -210,7 +210,7 @@ button {
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   gap: clamp(2rem, 5vw, 4.5rem);
   align-items: center;
-  padding: clamp(3rem, 8vw, 6.5rem) 0 clamp(3.5rem, 8vw, 6rem);
+  padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2.25rem, 4.5vw, 3.5rem);
 }
 
 .hero h1 {
@@ -421,7 +421,7 @@ button {
 
 /* ---------- Sections ---------- */
 .section {
-  padding: clamp(3.5rem, 8vw, 6rem) 0;
+  padding: clamp(2.25rem, 4.5vw, 3.5rem) 0;
   border-top: 1px solid var(--line);
 }
 
@@ -439,12 +439,8 @@ button {
   color: var(--muted);
 }
 
-.subsection + .subsection {
-  margin-top: clamp(3rem, 6vw, 4.5rem);
-}
-
 .subsection {
-  margin-top: 2.5rem;
+  margin-top: clamp(2rem, 4vw, 2.75rem);
 }
 
 .subsection h3 {
@@ -458,7 +454,7 @@ button {
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
   gap: clamp(1.5rem, 4vw, 3rem);
-  margin-top: 2.5rem;
+  margin-top: 1.75rem;
   padding: clamp(1rem, 2.5vw, 1.5rem);
   background: var(--paper-raised);
   border-radius: var(--radius-lg);
@@ -471,13 +467,46 @@ button {
   background: #0b1120;
 }
 
+.featured + .featured {
+  margin-top: clamp(1.5rem, 3vw, 2rem);
+}
+
+.featured--flip {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+}
+
+.featured--flip .featured-media {
+  order: 2;
+}
+
 .featured-stage img,
+.featured-stage video,
 .featured-stage iframe {
   display: block;
   width: 100%;
   height: 100%;
   border: 0;
   object-fit: cover;
+}
+
+.video-facade {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.video-facade img {
+  opacity: 0.85;
+  transition: opacity 150ms ease;
+}
+
+.video-facade:hover img {
+  opacity: 1;
 }
 
 .play-badge {
@@ -500,8 +529,32 @@ button {
   border-color: transparent transparent transparent var(--on-marigold);
 }
 
-.featured-watch {
+.play-badge--large {
+  width: 72px;
+  height: 72px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+}
+
+.play-badge--large::after {
+  left: 28px;
+  top: 22px;
+  border-width: 14px 0 14px 22px;
+}
+
+.featured-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
   margin-top: 1.25rem;
+}
+
+.feature-label {
+  margin-top: 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 650;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 .featured-thumbs {
@@ -527,6 +580,10 @@ button {
   opacity: 1;
 }
 
+.featured-thumbs img.is-pixel {
+  image-rendering: pixelated;
+}
+
 .featured-thumbs img {
   aspect-ratio: 16 / 9;
   object-fit: cover;
@@ -549,7 +606,7 @@ button {
 }
 
 .feature-list {
-  margin: 1.25rem 0 0;
+  margin: 0.5rem 0 0;
   padding: 0;
   list-style: none;
 }
@@ -575,72 +632,54 @@ button {
 .proto-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(2rem, 3vw, 2.5rem) clamp(1rem, 2.5vw, 1.75rem);
-  margin-top: clamp(3rem, 6vw, 4rem);
+  gap: 1.75rem clamp(1rem, 2.5vw, 1.5rem);
+  margin-top: 1.5rem;
 }
 
 .proto {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-}
-
-.proto--wide {
-  grid-column: span 2;
-}
-
-.proto--full {
-  grid-column: 1 / -1;
-}
-
-.proto-open {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.2rem;
-  width: 100%;
-  cursor: pointer;
+  gap: 0.15rem;
 }
 
 .proto-image {
   display: block;
   width: 100%;
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.65rem;
+  padding: 0;
+  border: 0;
   overflow: hidden;
   border-radius: var(--radius-sm);
   background: var(--ink);
+  cursor: zoom-in;
 }
 
-.proto-image img {
+.proto-image img,
+.proto-image video {
+  display: block;
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
+  transition: transform 250ms ease;
 }
 
-.proto--wide .proto-image img {
-  aspect-ratio: 16 / 7.4;
-}
-
-.proto--full .proto-image img {
-  aspect-ratio: 21 / 8;
+.proto-image:hover img,
+.proto-image:hover video {
+  transform: scale(1.03);
 }
 
 .proto-title {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 750;
   font-stretch: 108%;
   font-variation-settings: 'wdth' 108;
 }
 
-.proto--full .proto-title {
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
-}
-
 .proto-summary {
-  max-width: var(--measure);
-  margin-top: 0.3rem;
+  margin-top: 0.25rem;
   color: var(--muted);
-  font-size: 0.98rem;
+  font-size: 0.94rem;
 }
 
 .proto-links {
@@ -682,6 +721,17 @@ button {
   margin-bottom: 0.9rem;
   border-radius: var(--radius-sm);
   overflow: hidden;
+}
+
+.ml-shots--clip {
+  grid-template-columns: 1fr;
+}
+
+.ml-shots video {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
 }
 
 .ml-shots img {
@@ -751,33 +801,6 @@ button {
 .rl-table td:last-child {
   padding-right: 0;
   text-align: right;
-}
-
-/* ---------- Now ---------- */
-.now-card {
-  margin-top: 2rem;
-  max-width: 46rem;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border-left: 6px solid var(--marigold);
-  background: var(--paper-raised);
-  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-}
-
-.now-status {
-  font-weight: 600;
-  color: var(--dusk);
-}
-
-.now-card h3 {
-  margin: 0.3rem 0 1rem;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-stretch: 125%;
-  font-variation-settings: 'wdth' 125;
-  font-weight: 850;
-}
-
-.now-card p + p {
-  margin-top: 0.75rem;
 }
 
 /* ---------- About / contact ---------- */
@@ -917,9 +940,16 @@ button {
 @media (max-width: 900px) {
   .hero,
   .featured,
+  .featured--flip,
   .lightbox-inner {
     grid-template-columns: 1fr;
   }
+
+  .featured--flip .featured-media {
+    order: 0;
+  }
+
+
 
   .hero h1 {
     max-width: 14ch;
@@ -930,24 +960,27 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .proto--wide {
-    grid-column: span 2;
-  }
 }
 
 @media (max-width: 620px) {
-  .proto-grid,
   .ml-grid {
     grid-template-columns: 1fr;
   }
 
-  .proto--wide {
-    grid-column: auto;
+  .proto-grid {
+    gap: 1.25rem 0.9rem;
   }
 
-  .proto--wide .proto-image img,
-  .proto--full .proto-image img {
-    aspect-ratio: 16 / 10;
+  .proto-title {
+    font-size: 1rem;
+  }
+
+  .proto-summary {
+    font-size: 0.88rem;
+  }
+
+  .featured-thumbs button {
+    width: 72px;
   }
 
   .rl-table thead {

@@ -25,6 +25,8 @@ The agent is plain JavaScript, with no ML library. It pauses when scrolled out o
 
 ### Game projects
 
+The traffic simulator and Super Peach are featured with a video or gallery and a "What I built" list. The rest sit in a compact prototype grid.
+
 | Project | Engine | Summary |
 | --- | --- | --- |
 | Traffic simulator | Unreal Engine | Two-lane autonomous traffic with braking to avoid collisions, lane following, and recovery to the nearest lane when placed off the road |
@@ -37,6 +39,8 @@ The agent is plain JavaScript, with no ML library. It pauses when scrolled out o
 | Shooter prototypes | Unity | Small shooters with side and top-down cameras |
 
 ### Reinforcement learning agents
+
+The Unity ML-Agents sit right under the hero as "Trained agents"; the Gym and Atari models follow the games as "RL benchmarks".
 
 | Agent | Framework | Algorithm | Model or demo |
 | --- | --- | --- | --- |
@@ -54,6 +58,8 @@ The ML-Agents demos load a model you pick by username; the trained agents here a
 
 The site is built with Vite and React 19, with no UI or animation libraries. Styling is hand-written CSS using custom properties for the color tokens, and it adapts to light and dark mode from the system setting. Type is set in [Archivo](https://fonts.google.com/specimen/Archivo), using its variable width axis to contrast expanded headlines with condensed labels.
 
+Any project or ML-Agents card can show a short gameplay loop instead of a still: put an MP4 or WebM in `src/assets/clips/`, import it in `data.js`, and set `clip` on that entry. Clips play muted only while on screen and fall back to the screenshot for reduced motion. The traffic simulator's Google Drive embed only loads after the visitor presses play.
+
 Screenshots are served as WebP, except pixel art, which stays PNG and renders with crisp pixel scaling. The screenshot viewer is built on the native `<dialog>` element, so keyboard navigation and Escape to close come from the browser.
 
 Every push to `main` builds the site and deploys it to GitHub Pages through GitHub Actions.
@@ -67,6 +73,7 @@ src/
   components/
     FrozenLakeAgent.jsx     the live Q-learning demo
     Lightbox.jsx            screenshot viewer
+    Clip.jsx                looping gameplay clip with still fallback
   styles.css                design tokens, layout, dark mode
   assets/projects/          project screenshots
 public/                     favicon and static files

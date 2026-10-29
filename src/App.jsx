@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import FrozenLakeAgent from './components/FrozenLakeAgent.jsx'
 import Lightbox from './components/Lightbox.jsx'
-import { profile, featured, prototypes, mlAgents, classicRL, now, about } from './data.js'
+import Clip from './components/Clip.jsx'
+import { profile, featured, prototypes, mlAgents, classicRL, about } from './data.js'
 
 function Header() {
   return (
     <header className="site-header">
       <a className="wordmark" href="#top">{profile.name}</a>
       <nav aria-label="Sections">
-        <a href="#work">Work</a>
         <a href="#agents">Agents</a>
+        <a href="#work">Games</a>
+        <a href="#benchmarks">Benchmarks</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </nav>
@@ -24,7 +26,7 @@ function Hero() {
         <h1>{profile.headline}</h1>
         <p className="hero-intro">{profile.intro}</p>
         <div className="hero-actions">
-          <a className="button button--solid" href="#work">See the work</a>
+          <a className="button button--solid" href="#work">See the games</a>
           {profile.resume && <a className="button" href={profile.resume}>Download resume</a>}
         </div>
       </div>
@@ -33,41 +35,55 @@ function Hero() {
   )
 }
 
-function Featured() {
+function FeaturedVideo({ video }) {
+  const [started, setStarted] = useState(false)
+
+  // A self-hosted file plays inline. A Google Drive embed only loads once asked
+  // for, since the iframe is heavy and slow to appear.
+  if (video.src) {
+    return <video src={video.src} poster={video.poster} controls playsInline preload="none" title={video.title} />
+  }
+  if (started) {
+    return <iframe src={video.embed} title={video.title} allow="autoplay; fullscreen" allowFullScreen />
+  }
+  return (
+    <button type="button" className="video-facade" onClick={() => setStarted(true)}>
+      <img src={video.poster} alt="" />
+      <span className="play-badge play-badge--large" aria-hidden="true" />
+      <span className="visually-hidden">Play {video.title}</span>
+    </button>
+  )
+}
+
+function Featured({ project, flip }) {
   const media = [
-    ...(featured.video ? [{ type: 'video', ...featured.video }] : []),
-    ...featured.images.map((img) => ({ type: 'image', ...img })),
+    ...(project.video ? [{ type: 'video', ...project.video }] : []),
+    ...project.images.map((img) => ({ type: 'image', ...img })),
   ]
   const [active, setActive] = useState(0)
   const current = media[active]
 
   return (
-    <article className="featured">
+    <article className={`featured${flip ? ' featured--flip' : ''}`}>
       <div className="featured-media">
-        <div className="featured-stage">
+        <div className={`featured-stage${project.pixel ? ' is-pixel' : ''}`}>
           {current.type === 'video' ? (
-            <iframe
-              src={current.embed}
-              title={current.title}
-              allow="autoplay; fullscreen"
-              allowFullScreen
-              loading="lazy"
-            />
+            <FeaturedVideo video={current} />
           ) : (
-            <img src={current.src} alt={current.alt} />
+            <Clip clip={active === 0 ? project.clip : null} image={current} />
           )}
         </div>
         {media.length > 1 && (
-          <div className="featured-thumbs" role="group" aria-label="Video and screenshots">
+          <div className="featured-thumbs" role="group" aria-label={`${project.title} video and screenshots`}>
             {media.map((m, i) => (
               <button
                 key={i}
                 type="button"
                 aria-pressed={active === i}
-                aria-label={m.type === 'video' ? 'Play video' : `Show screenshot ${featured.video ? i : i + 1}`}
+                aria-label={m.type === 'video' ? 'Show video' : `Show screenshot ${project.video ? i : i + 1}`}
                 onClick={() => setActive(i)}
               >
-                <img src={m.type === 'video' ? m.poster : m.src} alt="" />
+                <img src={m.type === 'video' ? m.poster : m.src} alt="" className={project.pixel ? 'is-pixel' : undefined} />
                 {m.type === 'video' && <span className="play-badge" aria-hidden="true" />}
               </button>
             ))}
@@ -75,69 +91,72 @@ function Featured() {
         )}
       </div>
       <div className="featured-copy">
-        <h3>{featured.title}</h3>
-        <p className="engine">{featured.engine}</p>
-        <p>{featured.summary}</p>
+        <h3>{project.title}</h3>
+        <p className="engine">{project.engine}</p>
+        <p>{project.summary}</p>
+        <p className="feature-label">{project.builtLabel}</p>
         <ul className="feature-list">
-          {featured.features.map((f) => <li key={f}>{f}</li>)}
+          {project.features.map((f) => <li key={f}>{f}</li>)}
         </ul>
-        {featured.video && (
-          <p className="featured-watch">
-            <a className="text-link" href={featured.video.url} target="_blank" rel="noreferrer">
-              Watch on Google Drive
-            </a>
-          </p>
-        )}
+        <ProjectLinks project={project} className="featured-links" />
       </div>
     </article>
   )
 }
 
+function ProjectLinks({ project, className, children }) {
+  const watch = project.video && !project.video.src ? project.video.url : null
+  if (!children && !project.playUrl && !project.source && !watch) return null
+  return (
+    <div className={className}>
+      {children}
+      {project.playUrl && (
+        <a className="proto-more" href={project.playUrl} target="_blank" rel="noreferrer">Play on itch.io</a>
+      )}
+      {watch && (
+        <a className="proto-more" href={watch} target="_blank" rel="noreferrer">Watch on Google Drive</a>
+      )}
+      {project.source && (
+        <a className="proto-more" href={project.source} target="_blank" rel="noreferrer">Source</a>
+      )}
+    </div>
+  )
+}
+
 function Prototypes({ onOpen }) {
   return (
-    <div className="proto-grid">
-      {prototypes.map((p) => {
-        const span = p.span === 'full' ? ' proto--full' : p.span === 'wide' ? ' proto--wide' : ''
-        return (
-          <article key={p.title} className={`proto${span}`}>
-            <div className="proto-open" onClick={() => onOpen(p)}>
-              <span className={`proto-image${p.pixel ? ' is-pixel' : ''}`}>
-                <img src={p.images[0].src} alt={p.images[0].alt} loading="lazy" />
+    <div className="subsection">
+      <h3>Gameplay prototypes</h3>
+      <p className="section-lede">Smaller games, each built around a single mechanic.</p>
+      <div className="proto-grid">
+        {prototypes.map((p) => (
+          <article key={p.title} className="proto">
+            <button type="button" className="proto-image" onClick={() => onOpen(p)}>
+              <Clip clip={p.clip} image={p.images[0]} />
+              <span className="visually-hidden">
+                {p.images.length > 1 ? `View ${p.images.length} screenshots of ${p.title}` : `View screenshot of ${p.title}`}
               </span>
-              <h3 className="proto-title">{p.title}</h3>
-              <span className="engine">{p.engine}</span>
-              <p className="proto-summary">{p.summary}</p>
-            </div>
-            <div className="proto-links">
-              <button type="button" className="proto-more" onClick={() => onOpen(p)}>
-                {p.images.length > 1 ? `View ${p.images.length} screenshots` : 'View screenshot'}
-              </button>
-              {p.playUrl && (
-                <a className="proto-more" href={p.playUrl} target="_blank" rel="noreferrer">
-                  Play on itch.io
-                </a>
-              )}
-            </div>
+            </button>
+            <h4 className="proto-title">{p.title}</h4>
+            <span className="engine">{p.engine}</span>
+            <p className="proto-summary">{p.summary}</p>
+            <ProjectLinks project={p} className="proto-links" />
           </article>
-        )
-      })}
+        ))}
+      </div>
     </div>
   )
 }
 
 function Agents() {
   return (
-    <>
-      <div className="subsection">
-        <h3>Unity ML-Agents</h3>
-        <p className="section-lede">
-          Trained agents you can watch live on Hugging Face. When the demo asks for a model, pick koushik2k3.
-        </p>
         <div className="ml-grid">
           {mlAgents.map((a) => (
             <article key={a.title} className="ml-agent">
-              <div className="ml-shots">
-                {a.images.map((img) => <img key={img.src} src={img.src} alt={img.alt} loading="lazy" />)}
+              <div className={`ml-shots${a.clip ? ' ml-shots--clip' : ''}`}>
+                {a.clip
+                  ? <Clip clip={a.clip} image={a.images[0]} />
+                  : a.images.map((img) => <img key={img.src} src={img.src} alt={img.alt} loading="lazy" />)}
               </div>
               <h4>{a.title}</h4>
               <p>{a.summary}</p>
@@ -145,11 +164,11 @@ function Agents() {
             </article>
           ))}
         </div>
-      </div>
+  )
+}
 
-      <div className="subsection">
-        <h3>Classic environments</h3>
-        <p className="section-lede">Trained models published on Hugging Face.</p>
+function Benchmarks() {
+  return (
         <table className="rl-table">
           <thead>
             <tr>
@@ -179,8 +198,6 @@ function Agents() {
             ))}
           </tbody>
         </table>
-      </div>
-    </>
   )
 }
 
@@ -195,39 +212,37 @@ export default function App() {
         <main>
           <Hero />
 
-          <section className="section" id="work" aria-labelledby="work-title">
-            <h2 id="work-title">Work</h2>
-            <p className="section-lede">Engine projects, from game AI to small gameplay prototypes.</p>
-            <Featured />
-            <Prototypes onOpen={setOpen} />
-          </section>
-
           <section className="section" id="agents" aria-labelledby="agents-title">
-            <h2 id="agents-title">Agents</h2>
-            <p className="section-lede">Reinforcement learning agents trained to play games and solve tasks.</p>
+            <h2 id="agents-title">Trained agents</h2>
+            <p className="section-lede">
+              Unity ML-Agents trained with PPO. Watch them play live on Hugging Face, and pick koushik2k3 when the demo asks for a model.
+            </p>
             <Agents />
           </section>
 
-          {now && (
-            <section className="section now" aria-labelledby="now-title">
-              <h2 id="now-title">Now</h2>
-              <div className="now-card">
-                <p className="now-status">{now.status}</p>
-                <h3>{now.title}</h3>
-                {now.body.map((p) => <p key={p}>{p}</p>)}
-              </div>
-            </section>
-          )}
+          <section className="section" id="work" aria-labelledby="work-title">
+            <h2 id="work-title">Games</h2>
+            <p className="section-lede">Projects built in Unreal, Unity, and Godot.</p>
+            {featured.map((p, i) => <Featured key={p.title} project={p} flip={i % 2 === 1} />)}
+            <Prototypes onOpen={setOpen} />
+          </section>
+
+          <section className="section" id="benchmarks" aria-labelledby="benchmarks-title">
+            <h2 id="benchmarks-title">RL benchmarks</h2>
+            <p className="section-lede">Agents trained on classic Gym and Atari environments, with the models published on Hugging Face.</p>
+            <Benchmarks />
+          </section>
+
 
           <section className="section about" id="about" aria-labelledby="about-title">
-            <h2 id="about-title">About</h2>
+            <h2 id="about-title">About me</h2>
             <div className="about-body">
               {about.map((p) => <p key={p}>{p}</p>)}
             </div>
           </section>
 
           <section className="section contact" id="contact" aria-labelledby="contact-title">
-            <h2 id="contact-title">Let’s talk</h2>
+            <h2 id="contact-title">Get in touch</h2>
             <p className="section-lede">Open to internships and roles in gameplay programming and game AI.</p>
             <a className="contact-email" href={`mailto:${profile.email}`}>{profile.email}</a>
             <ul className="contact-links">

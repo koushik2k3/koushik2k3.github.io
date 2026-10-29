@@ -23,6 +23,10 @@ import lander from './assets/projects/lunar-lander.webp'
 import taxi from './assets/projects/taxi.webp'
 import frozenLake from './assets/projects/frozen-lake.webp'
 import invaders from './assets/projects/space-invaders.png'
+import superPeachClip from './assets/clips/super-peach.mp4'
+import huggyClip from './assets/clips/huggy.mp4'
+import snowballClip from './assets/clips/snowball.mp4'
+import pyramidsClip from './assets/clips/pyramids.mp4'
 
 export const profile = {
   name: 'Koushik Padmanabhan',
@@ -40,39 +44,51 @@ export const profile = {
   resume: 'resume.pdf',
 }
 
-export const featured = {
-  title: 'Traffic simulator',
-  engine: 'Unreal Engine',
-  summary:
-    'Autonomous cars sharing a two-lane circuit. They brake to avoid hitting each other, stick to their lane, and find their way back to the road when placed off it.',
-  features: [
-    'Two-lane traffic running on placed lane splines',
-    'Collision avoidance through braking when another car is ahead',
-    'Cars follow whichever lane they are placed on',
-    'Cars dropped off the road find the nearest lane and merge onto it',
-  ],
-  video: {
-    url: 'https://drive.google.com/file/d/1D__91bMoh9DyKQQehAjVKk0a2JmInH1x/view?usp=sharing',
-    embed: 'https://drive.google.com/file/d/1D__91bMoh9DyKQQehAjVKk0a2JmInH1x/preview',
-    poster: traffic1,
-    title: 'Traffic simulator video',
-  },
-  images: [
-    { src: traffic1, alt: 'Cars driving in a line along a curved two-lane track' },
-    { src: traffic2, alt: 'Wide view of the track with cars spread across both lanes' },
-  ],
-}
+// Clips: drop a short, muted gameplay loop (MP4 or WebM, under ~3 MB) into
+// src/assets/clips/, import it at the top of this file, and set `clip` on a
+// project or agent. It autoplays muted while on screen and falls back to the
+// screenshot for visitors with reduced motion turned on.
+// source: link to the project's GitHub repo. Empty hides the link.
 
-// span: 'wide' takes two columns on desktop. Keep each row adding up to 3.
-// NOTE: engine labels marked 'Unity' were inferred from the screenshots. Double-check them.
-export const prototypes = [
+export const featured = [
+  {
+    title: 'Traffic simulator',
+    engine: 'Unreal Engine',
+    summary:
+      'Autonomous cars sharing a two-lane circuit. They brake to avoid hitting each other, stick to their lane, and find their way back to the road when placed off it.',
+    builtLabel: 'What I built',
+    features: [
+      'Two-lane traffic running on placed lane splines',
+      'Collision avoidance through braking when another car is ahead',
+      'Cars follow whichever lane they are placed on',
+      'Cars dropped off the road find the nearest lane and merge onto it',
+    ],
+    source: '',
+    video: {
+      url: 'https://drive.google.com/file/d/1D__91bMoh9DyKQQehAjVKk0a2JmInH1x/view?usp=sharing',
+      embed: 'https://drive.google.com/file/d/1D__91bMoh9DyKQQehAjVKk0a2JmInH1x/preview',
+      poster: traffic1,
+      title: 'Traffic simulator video',
+    },
+    images: [
+      { src: traffic1, alt: 'Cars driving in a line along a curved two-lane track' },
+      { src: traffic2, alt: 'Wide view of the track with cars spread across both lanes' },
+    ],
+  },
   {
     title: 'Super Peach',
     engine: 'Godot',
-    span: 'full',
     pixel: true,
-    summary: 'A 2D platformer with jumping, coins to collect, enemies to avoid, and a coin tally at the end.',
-    details: [],
+    summary: 'A 2D pixel-art platformer: jump across the level, collect coins, avoid the slimes, and see your coin tally at the end.',
+    builtLabel: 'What I built',
+    features: [
+      'Platforming movement and jumping',
+      'Collectible coins with an end-of-level tally',
+      'Patrolling enemies to avoid',
+      'Published and playable in the browser on itch.io',
+    ],
+    source: '',
+    clip: superPeachClip,
     playUrl: 'https://kousa2k3.itch.io/super-peach',
     images: [
       { src: platformer1, alt: 'Knight standing on grass blocks next to a Space to jump prompt' },
@@ -80,10 +96,17 @@ export const prototypes = [
       { src: platformer3, alt: 'End screen reading You collected 7 coins' },
     ],
   },
+]
+
+// Smaller prototypes, shown as a compact grid of three across.
+// NOTE: engine labels marked 'Unity' were inferred from the screenshots. Double-check them.
+export const prototypes = [
   {
     title: 'Endless flyer',
     engine: 'Unity',
     summary: 'An infinite flight through a canyon. Fly up and down with W and S to dodge obstacles that spawn at random positions.',
+    clip: null,
+    source: '',
     details: ['W and S to climb and dive', 'Scrolling background and animated propeller', 'Obstacles spawn at random positions'],
     images: [{ src: flyer, alt: 'Red and yellow plane flying between dark canyon walls' }],
   },
@@ -92,12 +115,16 @@ export const prototypes = [
     engine: 'Unity',
     summary: 'Run through a low-poly town and jump the obstacles in your path.',
     details: [],
+    clip: null,
+    source: '',
     images: [{ src: runner, alt: 'Blocky character jumping over a stone wall on a town street' }],
   },
   {
     title: 'Sumo waves',
     engine: 'Unity',
     summary: 'Knock enemy balls off a floating arena before they knock you off. Each wave doubles the enemy count.',
+    clip: null,
+    source: '',
     details: ['Physics-based pushing', 'Enemy count doubles every wave'],
     images: [{ src: sumo, alt: 'White player ball and coloured enemy balls on a dark hexagonal platform' }],
   },
@@ -106,6 +133,8 @@ export const prototypes = [
     engine: 'Unity',
     summary: 'Shove enemy balls into the opposing goal before they roll into yours.',
     details: [],
+    clip: null,
+    source: '',
     images: [{ src: football, alt: 'Two football-patterned balls in front of a goal on a grass field' }],
   },
   {
@@ -113,6 +142,8 @@ export const prototypes = [
     engine: 'Unity',
     summary: 'A Fruit Ninja-style game. Shown here in the editor preview to give a sense of the play space.',
     details: [],
+    clip: null,
+    source: '',
     images: [{ src: slicer, alt: 'Editor view of balls and a bomb launched into the play area' }],
   },
   {
@@ -120,6 +151,8 @@ export const prototypes = [
     engine: 'Unity',
     summary: 'Small shooter games played from a side view and a top-down view.',
     details: [],
+    clip: null,
+    source: '',
     images: [
       { src: shooter1, alt: 'Farmer character and a running dog, with a projectile in the air' },
       { src: shooter2, alt: 'Top-down view of the player and an animal on a grassy field' },
@@ -133,6 +166,7 @@ export const mlAgents = [
   {
     title: 'Huggy',
     summary: 'Throw a stick and Huggy the dog runs to fetch it.',
+    clip: huggyClip,
     href: 'https://huggingface.co/spaces/ThomasSimonini/Huggy',
     images: [
       { src: huggy1, alt: 'Huggy the dog running across a fenced garden' },
@@ -142,6 +176,7 @@ export const mlAgents = [
   {
     title: 'Snowball target',
     summary: 'The agent positions itself and fires snowballs at the target.',
+    clip: snowballClip,
     href: 'https://huggingface.co/spaces/ThomasSimonini/ML-Agents-SnowballTarget',
     images: [
       { src: snowball1, alt: 'Agent throwing a snowball down an icy lane' },
@@ -151,6 +186,7 @@ export const mlAgents = [
   {
     title: 'Pyramids',
     summary: 'The agent explores to find a button, then hunts down the treasure pyramid it unlocks.',
+    clip: pyramidsClip,
     href: 'https://huggingface.co/spaces/unity/ML-Agents-Pyramids',
     images: [
       { src: pyramids1, alt: 'Agent approaching a green button on the floor' },
@@ -189,16 +225,6 @@ export const classicRL = [
     image: { src: invaders, alt: 'Atari Space Invaders screen with rows of aliens', pixel: true },
   },
 ]
-
-// Set to null to hide the section.
-export const now = {
-  title: 'Kali Yuga',
-  status: 'Concept in development',
-  body: [
-    'A soulslike set in India during the Dvapara Yuga, in the years after the Mahabharata. Think of it as India’s answer to Black Myth: Wukong.',
-    'The game will explore themes of dharma, karma, and the cyclical nature of time, with a focus on challenging combat and deep lore.',
-  ],
-}
 
 export const about = [
   'I’m from Chennai and now live in Los Angeles, where I started the MS in Computer Science (Game Development) at the University of Southern California in August 2026.',
